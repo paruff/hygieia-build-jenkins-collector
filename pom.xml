@@ -8,14 +8,14 @@
   <description>BuildCollector Microservice</description>
   <url>https://github.com/capitalone/Hygieia</url>
   <packaging>jar</packaging>
-  <version>3.1.2-SNAPSHOT</version>
+  <version>3.2.0-SNAPSHOT</version>
 
 
 
   <parent>
-    <groupId>com.capitalone.dashboard</groupId>
-    <artifactId>Hygieia</artifactId>
-    <version>3.0.1</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.22.RELEASE</version>
   </parent>
 
   <organization>
@@ -47,11 +47,26 @@
   </distributionManagement>
 
   <properties>
+    <!-- Dependencies -->
+    <com.capitalone.dashboard.core.version>3.10.0</com.capitalone.dashboard.core.version>
+    <spring-security.version>4.2.18.RELEASE</spring-security.version>
+    <tomcat.version>8.5.57</tomcat.version>
+    <commons-beanutils.version>1.9.4</commons-beanutils.version>
+    <commons-codec.version>1.14</commons-codec.version>
+    <commons-collections4.version>4.1</commons-collections4.version>
+    <commons-io.version>2.4</commons-io.version>
+    <commons-lang.version>3.10</commons-lang.version>
+    <fongo.version>2.2.0-RC2</fongo.version>
+    <guava.version>29.0-jre</guava.version>
+    <hibernate-validator.version>5.4.2.Final</hibernate-validator.version>
+    <jackson.version>2.10.3</jackson.version>
+    <jasypt.version>1.18</jasypt.version>
+    <logback.version>1.2.3</logback.version>
+    <mongodb.version>3.6.4</mongodb.version>
+    <assertj.version>3.9.0</assertj.version>
+
+    <!-- Plugins -->
     <apache.rat.plugin.version>0.13</apache.rat.plugin.version>
-    <bc.version>3.0.1</bc.version>
-    <com.capitalone.dashboard.core.version>3.1.5</com.capitalone.dashboard.core.version>
-    <commons.io.version>2.4</commons.io.version>
-    <commons.lang.version>3.8.1</commons.lang.version>
     <coveralls.maven.plugin.version>4.3.0</coveralls.maven.plugin.version>
     <developmentTeam>The Hygieia Team</developmentTeam>
     <jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
@@ -72,12 +87,9 @@
     <maven.project-info.version>3.0.0</maven.project-info.version>
     <maven.scm.publish.plugin.version>3.0.0</maven.scm.publish.plugin.version>
     <maven.site.plugin.version>3.7.1</maven.site.plugin.version>
-    <mockito.all.version>1.10.19</mockito.all.version>
-    <org.joda.joda-convert.version>1.8.1</org.joda.joda-convert.version>
     <site.publish.url>https://github.com/Hygieia/hygieia-build-jenkins-collector</site.publish.url>
     <site.publish.checkout.directory>site-content</site.publish.checkout.directory>
     <spotbugs.plugin.version>3.1.11</spotbugs.plugin.version>
-    <svnkit.version>1.8.7</svnkit.version>
   </properties>
 
   <issueManagement>
@@ -122,74 +134,6 @@
       <version>${com.capitalone.dashboard.core.version}</version>
     </dependency>
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons.io.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons.lang.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.joda</groupId>
-      <artifactId>joda-convert</artifactId>
-      <version>${org.joda.joda-convert.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-mongodb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.tmatesoft.svnkit</groupId>
-      <artifactId>svnkit</artifactId>
-      <version>${svnkit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>${mockito.all.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
@@ -201,7 +145,22 @@
   </dependencies>
 
   <build>
-    <defaultGoal>clean verify apache-rat:check japicmp:cmp checkstyle:check spotbugs:check javadoc:javadoc</defaultGoal>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/version.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/version.properties</exclude>
+        </excludes>
+      </resource>
+    </resources>
     <finalName>${artifactId}</finalName>
     <plugins>
       <plugin>
@@ -218,37 +177,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>com.github.siom79.japicmp</groupId>
-        <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.13.1</version>
-        <configuration>
-          <oldVersion>
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>${project.artifactId}</artifactId>
-              <version>${bc.version}</version>
-              <type>jar</type>
-            </dependency>
-          </oldVersion>
-          <newVersion>
-            <file>
-              <path>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</path>
-            </file>
-          </newVersion>
-          <parameter>
-            <onlyModified>true</onlyModified>
-            <breakBuildOnBinaryIncompatibleModifications>${japicmp.breakBuildOnBinaryIncompatibleModifications}</breakBuildOnBinaryIncompatibleModifications>
-            <breakBuildOnSourceIncompatibleModifications>${japicmp.breakBuildOnSourceIncompatibleModifications}</breakBuildOnSourceIncompatibleModifications>
-            <!-- skip japicmp on "mvn site" - use "mvn package site" to include report -->
-            <ignoreMissingNewVersion>true</ignoreMissingNewVersion>
-            <reportOnlyFilename>true</reportOnlyFilename>
-            <skipPomModules>true</skipPomModules>
-            <ignoreMissingClasses>false</ignoreMissingClasses>
-          </parameter>
-          <skip>${japicmp.skip}</skip>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${maven.checkstyle.plugin.version}</version>
@@ -256,7 +184,7 @@
           <configLocation>src/devops/checkstyle.xml</configLocation>
           <suppressionsLocation>src/devops/checkstyle-suppressions.xml</suppressionsLocation>
           <encoding>UTF-8</encoding>
-          <consoleOutput>true</consoleOutput>
+          <consoleOutput>false</consoleOutput>
           <failsOnError>true</failsOnError>
           <linkXRef>false</linkXRef>
         </configuration>
@@ -276,10 +204,9 @@
         <version>${apache.rat.plugin.version}</version>
         <configuration>
           <excludes>
-            <exclude>**.tests/**</exclude>
-            <exclude>**logs/**</exclude>
-            <exclude>**site-content/**</exclude>
-            <exclude>RELEASE-NOTES.txt</exclude>
+            <exclude>.tests/**</exclude>
+            <exclude>.tests/**</exclude>
+            <exclude>logs/**</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/apache.config.template</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/test.properties.template</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/svnserve.config.template</exclude>
@@ -302,22 +229,6 @@
             <ruleset>src/devops/pmd.xml</ruleset>
           </rulesets>
           <targetJdk>${java.compilation.target}</targetJdk>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <configuration>
-          <skipDockerBuild>false</skipDockerBuild>
-          <imageName>hygieia-build-jenkins-collector</imageName>
-          <dockerDirectory>${project.basedir}/docker</dockerDirectory>
-          <resources>
-            <resource>
-              <targetPath>/</targetPath>
-              <directory>${project.build.directory}</directory>
-              <include>${project.build.finalName}.jar</include>
-            </resource>
-          </resources>
         </configuration>
       </plugin>
       <plugin>
@@ -423,7 +334,9 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${maven.javadoc.plugin.version}</version>
         <configuration>
-          <extdirs>src/test</extdirs>
+          <failOnError>false</failOnError>
+          <failOnWarnings>false</failOnWarnings>
+          <excludes>**/*Test*.java</excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -459,30 +372,6 @@
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
         <version>0.13.1</version>
-        <configuration>
-          <oldVersion>
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>${project.artifactId}</artifactId>
-              <version>${bc.version}</version>
-              <type>jar</type>
-            </dependency>
-          </oldVersion>
-          <newVersion>
-            <file>
-              <path>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</path>
-            </file>
-          </newVersion>
-          <parameter>
-            <onlyModified>true</onlyModified>
-            <breakBuildOnBinaryIncompatibleModifications>${japicmp.breakBuildOnBinaryIncompatibleModifications}</breakBuildOnBinaryIncompatibleModifications>
-            <breakBuildOnSourceIncompatibleModifications>${japicmp.breakBuildOnSourceIncompatibleModifications}</breakBuildOnSourceIncompatibleModifications>
-            <!-- skip japicmp on "mvn site" - use "mvn package site" to include report -->
-            <skipPomModules>true</skipPomModules>
-            <ignoreMissingNewVersion>true</ignoreMissingNewVersion>
-            <reportOnlyFilename>true</reportOnlyFilename>
-          </parameter>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.rat</groupId>
@@ -490,10 +379,8 @@
         <version>${apache.rat.plugin.version}</version>
         <configuration>
           <excludes>
-            <exclude>**.tests/**</exclude>
-            <exclude>**logs/**</exclude>
-            <exclude>**site-content/**</exclude>
-            <exclude>RELEASE-NOTES.txt</exclude>
+            <exclude>.tests/**</exclude>
+            <exclude>logs/**</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/apache.config.template</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/test.properties.template</exclude>
             <exclude>src/test/resources/org/tmatesoft/svn/test/svnserve.config.template</exclude>
@@ -547,7 +434,7 @@
           <template>release-notes.vm</template>
           <templateDirectory>src/changes</templateDirectory>
           <issueLinkTemplatePerSystem>
-            <github>http://github.com/Hygieia/hygieia-build-jenkins-collector/issues/%ISSUE%</github>
+            <github>http://github.com/Hygieia/${repository.name}/issues/%ISSUE%</github>
           </issueLinkTemplatePerSystem>
         </configuration>
         <reportSets>
@@ -635,7 +522,7 @@
               <announcementDirectory>.</announcementDirectory>
               <announcementFile>RELEASE-NOTES.txt</announcementFile>
               <announceParameters>
-                <releaseVersion>${version}</releaseVersion>
+                <releaseVersion>${project.version}</releaseVersion>
               </announceParameters>
             </configuration>
             <executions>
@@ -644,80 +531,6 @@
                 <phase>generate-resources</phase>
                 <goals>
                   <goal>announcement-generate</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>test-deploy</id>
-      <properties>
-        <altDeploymentRepository>id::default::file:target/deploy</altDeploymentRepository>
-      </properties>
-    </profile>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.5.1</version>
-              <configuration>
-                  <source>1.8</source>
-                  <target>1.8</target>
-              </configuration>
-          </plugin>
-          <plugin>
-              <groupId>org.sonatype.plugins</groupId>
-              <artifactId>nexus-staging-maven-plugin</artifactId>
-              <version>1.6.8</version>
-              <extensions>true</extensions>
-              <configuration>
-                  <serverId>ossrh</serverId>
-                  <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                  <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                  <autoDropAfterRelease>true</autoDropAfterRelease>
-                  <stagingProfileId>26a9600c05a6d3</stagingProfileId>
-              </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>create-javadoc-jar</id>
-                <goals>
-                  <goal>javadoc</goal>
-                  <goal>jar</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-            <configuration>
-              <source>${maven.compiler.source}</source>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-test-sources</id>
-                <goals>
-                  <goal>test-jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>test-jar</goal>
                 </goals>
               </execution>
             </executions>
@@ -747,19 +560,19 @@
                 <configuration>
                   <tasks>
                     <exec executable="git">
-                      <arg line="clone -b gh-pages --single-branch ${site.publish.url} ${site.publish.checkout.directory}" />
+                      <arg line="clone -b gh-pages --single-branch ${site.publish.url} ${site.publish.checkout.directory}"/>
                     </exec>
 
                     <exec executable="git" dir="site-content">
-                      <arg line="fetch origin gh-pages" />
+                      <arg line="fetch origin gh-pages"/>
                     </exec>
 
                     <exec executable="git" dir="site-content">
-                      <arg line="reset --hard origin/gh-pages" />
+                      <arg line="reset --hard origin/gh-pages"/>
                     </exec>
 
                     <pathconvert pathsep=" " property="dirs">
-                      <dirset dir="${site.publish.checkout.directory}" includes="*" />
+                      <dirset dir="${site.publish.checkout.directory}" includes="*"/>
                     </pathconvert>
                   </tasks>
                 </configuration>
@@ -785,6 +598,78 @@
             <configuration>
               <timestampFormat>EpochMillis</timestampFormat>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.5.1</version>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <autoDropAfterRelease>true</autoDropAfterRelease>
+              <stagingProfileId>26a9600c05a6d3</stagingProfileId>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven.javadoc.plugin.version}</version>
+            <configuration>
+              <doclint>none</doclint>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
